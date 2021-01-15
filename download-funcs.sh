@@ -4,6 +4,10 @@
 
 BINUTILS_URL=https://ftp.gnu.org/gnu/binutils/$BINUTILS_PKG
 GCC_URL=http://mirrors.ustc.edu.cn/gnu/gcc/gcc-"$GCC_VERSION"/"$GCC_PKG"
+GMP_URL=http://mirrors.ustc.edu.cn/gnu/gmp/"$GMP_PKG"
+MPC_URL=http://mirrors.ustc.edu.cn/gnu/mpc/"$MPC_PKG"
+MPFR_URL=http://mirrors.ustc.edu.cn/gnu/mpfr/"$MPFR_PKG"
+
 GLIBC_URL=https://ftp.gnu.org/gnu/glibc/glibc-"$GLIBC_VERSION".tar.gz
 FLEX_URL=https://github.com/westes/flex/releases/download/v$FLEX_VERSION/$FLEX_PKG
 ZLIB_URL=http://zlib.net/"$ZLIB_PKG"
@@ -16,9 +20,6 @@ UTIL_LINUX_URL=https://mirror.bjtu.edu.cn/kernel/linux/utils/util-linux/v"$UTIL_
 GRUB_URL=https://ftp.gnu.org/gnu/grub/"$GRUB_PKG"
 SHADOW_URL=https://github.com/shadow-maint/shadow/releases/download/"$SHADOW_VERSION"/"$SHADOW_PKG"
 SED_URL=https://ftp.gnu.org/gnu/sed/"$SED_PKG"
-GMP_URL=https://ftp.gnu.org/gnu/gmp/"$GMP_PKG"
-MPFR_URL=http://mpfr.org/mpfr-current/"$MPFR_PKG"
-MPC_URL=https://ftp.gnu.org/gnu/mpc/"$MPC_PKG"
 NCURSES_URL=https://ftp.gnu.org/gnu/ncurses/"$NCURSES_PKG"
 VIM_URL=ftp://ftp.vim.org/pub/vim/unix/"$VIM_PKG"
 GPG_ERROR_URL=ftp://ftp.gnupg.org/gcrypt/libgpg-error/"$GPG_ERROR_PKG"
@@ -69,6 +70,11 @@ apply_patch() {
    patch -Np$2 < $1 || exit 1
 }
 
+apply_patch_optional() {
+   print_info "Using patch $1 (level: $2)"
+   patch -Np$2 < $1
+}
+
 unpack_glibc () {
    unpack xvzf $GLIBC_PKG $GLIBC_SRC &&
 
@@ -108,6 +114,43 @@ download_gcc () {
    fi
    unpack_gcc
 }
+
+unpack_gmp () {
+   unpack xjf $GMP_PKG $GMP_SRC
+}
+
+download_gmp () {
+   download $GMP_PKG $GMP_URL
+   if [ -d "$GMP_SRC" ]; then
+      return 0
+   fi
+   unpack_gmp
+}
+
+unpack_mpfr () {
+   unpack zxf $MPFR_PKG $MPFR_SRC
+}
+
+download_mpfr() {
+   download $MPFR_PKG $MPFR_URL &&
+   if [ -d "$MPFR_SRC" ]; then
+      return 0
+   fi
+   unpack_mpfr
+}
+
+unpack_mpc () {
+   unpack zxf $MPC_PKG $MPC_SRC
+}
+
+download_mpc() {
+   download $MPC_PKG $MPC_URL &&
+   if [ -d "$MPC_SRC" ]; then
+      return 0
+   fi
+   unpack_mpc
+}
+
 
 download_binutils () {
    download $BINUTILS_PKG $BINUTILS_URL &&
@@ -183,13 +226,3 @@ download_make () {
   unpack xf $MAKE_PKG $MAKE_SRC
 }
 
-download_grub () {
-  download $GRUB_PKG $GRUB_URL &&
-  if [ -d "$GRUB_SRC" ]; then
-    return 0
-  fi
-  unpack zxf $GRUB_PKG $GRUB_SRC &&
-  pushd $GRUB_SRC &&
-  apply_patch $SCRIPT_DIR/patches/grub/fix-build.patch 1 &&
-  popd
-}

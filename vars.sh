@@ -16,6 +16,9 @@ fi
 # Package versions.
 BINUTILS_VERSION=2.35.1
 GCC_VERSION=9.2.0
+GMP_VERSION=6.2.1
+MPC_VERSION=1.2.1
+MPFR_VERSION=4.1.0
 GLIBC_VERSION=2.32
 FLEX_VERSION=2.6.4
 ZLIB_VERSION=1.2.11
@@ -30,9 +33,6 @@ GRUB_VERSION=2.04
 # Shadow 4.7 is failing due to sys/prctl.h missing
 SHADOW_VERSION=4.6
 SED_VERSION=4.5
-GMP_VERSION=6.1.2
-MPFR_VERSION=4.1.0
-MPC_VERSION=1.1.0
 NCURSES_VERSION=6.1
 # 8.1: checking what tgetent() returns for an unknown terminal... configure: error: failed to compile test program.
 VIM_BASE_VERSION=74
@@ -46,6 +46,12 @@ BINUTILS_SRC=binutils-"$BINUTILS_VERSION"
 BINUTILS_PKG="${BINUTILS_SRC}.tar.bz2"
 GCC_SRC=gcc-"$GCC_VERSION"
 GCC_PKG="$GCC_SRC".tar.gz
+GMP_SRC=gmp-"$GMP_VERSION"
+GMP_PKG="$GMP_SRC".tar.bz2
+MPFR_SRC=mpfr-"$MPFR_VERSION"
+MPFR_PKG="$MPFR_SRC".tar.gz
+MPC_SRC=mpc-"$MPC_VERSION"
+MPC_PKG="$MPC_SRC".tar.gz
 GNUMACH_SRC=gnumach
 GNUMIG_SRC=mig
 HURD_SRC=hurd
@@ -73,10 +79,6 @@ SHADOW_SRC=shadow-"$SHADOW_VERSION"
 SHADOW_PKG="$SHADOW_SRC".tar.xz
 SED_SRC=sed-"$SED_VERSION"
 SED_PKG="$SED_SRC".tar.xz
-GMP_SRC=gmp-"$GMP_VERSION"
-GMP_PKG="${GMP_SRC}".tar.bz2
-MPFR_SRC=mpfr-"$MPFR_VERSION"
-MPFR_PKG="${MPFR_SRC}".tar.bz2
 MPC_SRC=mpc-"$MPC_VERSION"
 MPC_PKG="${MPC_SRC}".tar.gz
 NCURSES_SRC=ncurses-"$NCURSES_VERSION"

@@ -6,6 +6,9 @@
 mkdir -p $SYSTEM/src &&
 cd $SYSTEM/src &&
 
+download_gmp &&
+download_mpfr &&
+download_mpc &&
 download_gcc &&
 download_binutils &&
 download_gnumach &&
@@ -28,7 +31,11 @@ unpack zxf $LIBUUID_PKG $LIBUUID_SRC &&
 download $UTIL_LINUX_PKG $UTIL_LINUX_URL &&
 unpack zxf $UTIL_LINUX_PKG $UTIL_LINUX_SRC &&
 
-download_grub &&
+download $GRUB_PKG $GRUB_URL &&
+unpack zxf $GRUB_PKG $GRUB_SRC &&
+pushd $GRUB_SRC &&
+apply_patch_optional $SCRIPT_DIR/patches/grub/fix-build.patch 1 || true &&
+popd &&
 
 download $SHADOW_PKG $SHADOW_URL &&
 unpack Jxf $SHADOW_PKG $SHADOW_SRC &&
@@ -51,5 +58,4 @@ download_gcrypt &&
 
 download_make &&
 
-download_sed &&
-echo "Download complete."
+download_sed 
