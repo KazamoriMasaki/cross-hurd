@@ -25,8 +25,57 @@ compile_binutils ()
       --disable-werror \
       --disable-nls &&
    make -j$PROCS all &&
-   make -j$PROCS install &&
+   make install &&
    cd ..
+}
+
+compile_gmp () {
+    print_info "Cross compiling gmp"
+    rm -rf "$GMP_SRC".obj &&
+    mkdir -p "$GMP_SRC".obj &&
+    cd "$GMP_SRC".obj &&
+    AR="$HOST_MACHINE-ar" AS="$HOST_MACHINE-as" \
+    ../$GMP_SRC/configure \
+       --prefix="$ROOT" \
+       --build="$HOST" \
+       --host="$HOST" \
+       --with-sysroot="$SYSTEM" 
+    make -j$PROCS &&
+    make install
+    cd -
+}
+
+compile_mpfr () {
+    print_info "cross compiling mpfr"
+    echo $SYS_ROOT
+    rm -rf "$MPFR_SRC".obj &&
+    mkdir -p "$MPFR_SRC".obj &&
+    cd "$MPFR_SRC".obj &&
+    AR="$HOST_MACHINE-ar" AS="$HOST_MACHINE-as" \
+    ../$MPFR_SRC/configure \
+       --prefix="$ROOT" \
+       --build="$HOST" \
+       --host="$HOST" \
+       --with-sysroot="$SYSTEM"
+    make -j$PROCS &&
+    make install
+    cd -
+}
+
+compile_mpc () {
+    print_info "cross compiling mpc"
+    rm -rf "$MPC_SRC".obj &&
+    mkdir -p "$MPC_SRC".obj &&
+    cd "$MPC_SRC".obj &&
+    AR="$HOST_MACHINE-ar" LDFLAGS="-Wl,-rpath,${ROOT}/lib" AS="$HOST_MACHINE-as" \
+    ../$MPC_SRC/configure \
+       --prefix="$ROOT" \
+       --build="$HOST" \
+       --host="$HOST" \
+       --with-sysroot="$SYSTEM"
+    make -j$PROCS &&
+    make install
+    cd -
 }
 
 unpack_gcc_and_fix() {
@@ -53,6 +102,9 @@ compile_gcc ()
       --with-sysroot="$SYSTEM" \
       --with-local-prefix="$SYS_ROOT" \
       --with-native-system-header-dir="$SYS_ROOT"/include \
+      --with-mpc="$ROOT"  \
+      --with-mpfr="$ROOT" \
+      --with-gmp="$ROOT" \
       --disable-nls \
       --disable-shared \
       --disable-threads \
@@ -71,11 +123,11 @@ compile_gcc ()
       --disable-libstdcxx \
       --enable-languages=c &&
    make -j$PROCS all-gcc &&
-   make -j$PROCS install-gcc &&
+   make install-gcc &&
    make -j$PROCS configure-target-libgcc &&
    cd "$TARGET"/libgcc &&
    make -j$PROCS  all &&
-   make -j$PROCS install &&
+   make install &&
    cd - &&
    mv config.status config.status.removed &&
    rm -f config.cache *config.cache */*/config.cache &&
@@ -107,7 +159,7 @@ install_gnumig() {
    ../$GNUMIG_SRC/configure --target="$TARGET" \
       --prefix="$ROOT" &&
    make -j$PROCS &&
-   make -j$PROCS install &&
+   make install &&
    cd ..
 }
 
@@ -139,7 +191,7 @@ compile_first_glibc() {
    mkdir -p "$GLIBC_SRC".first_obj &&
    cd "$GLIBC_SRC".first_obj &&
    BUILD_CC="$HOST_MACHINE-gcc" CC="$TARGET"-gcc \
-   AR="$TARGET"-ar CXX="cxx-not-found" RANLIB="$TARGET"-ranlib \
+   AR="$TARGET"-ar CXX="" RANLIB="$TARGET"-ranlib \
    ../$GLIBC_SRC/configure \
       --with-binutils=${ROOT}/bin \
       --build="$HOST" \
@@ -156,7 +208,7 @@ compile_first_glibc() {
       libc_cv_ctors_header=yes &&
    make -j$PROCS || # workaround for "fails first time"?
    make -j$PROCS &&
-   make -j$PROCS install &&
+   make install &&
    cd ..
 }
 
@@ -187,7 +239,7 @@ compile_full_gcc () {
       --disable-libgomp \
       --with-arch=$CPU &&
    make -j$PROCS AS_FOR_TARGET="$TARGET-as" LD_FOR_TARGET="$TARGET-ld" all &&
-   make -j$PROCS install &&
+   make install &&
    cd ..
 }
 
@@ -212,18 +264,18 @@ compile_second_glibc() {
       --disable-werror \
       --disable-nscd &&
    make -j$PROCS &&
-   make -j$PROCS install &&
+   make install &&
    cd ..
 }
 
 compile_pkgconfiglite() {
    cd "$PKGCONFIGLITE_SRC" &&
    # otherwise "ln pkg-config i586-pc-gnu-pkg-config" in the install step fails
-   rm -fv "$ROOT"/bin/*-pkg-config &&
+   rm -fv "$ROOT"/bin/i586-pc-gnu-pkg-config &&
    ./configure --prefix="$ROOT" --host=${TARGET}\
       --with-pc-path="/sys/lib/pkgconfig:/sys/share/pkgconfig" &&
    make -j$PROCS &&
-   make -j$PROCS install &&
+   make  install &&
    cd ..
 }
 
@@ -246,6 +298,9 @@ mkdir -p "$SYSTEM" && cd "$SYSTEM" &&
 
  cd src &&
    compile_binutils &&
+   compile_gmp &&
+   compile_mpfr &&
+   compile_mpc && 
    compile_gcc &&
    compile_pkgconfiglite &&
    install_gnumach_headers &&
