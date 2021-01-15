@@ -3,15 +3,15 @@
 . ./config.sh
 
 BINUTILS_URL=https://ftp.gnu.org/gnu/binutils/$BINUTILS_PKG
-GCC_URL=http://www.netgull.com/gcc/releases/gcc-"$GCC_VERSION"/"$GCC_PKG"
+GCC_URL=http://mirrors.ustc.edu.cn/gnu/gcc/gcc-"$GCC_VERSION"/"$GCC_PKG"
 FLEX_URL=https://github.com/westes/flex/releases/download/v$FLEX_VERSION/$FLEX_PKG
 ZLIB_URL=http://zlib.net/"$ZLIB_PKG"
 BASH_URL=https://ftp.gnu.org/gnu/bash/"$BASH_PKG"
 COREUTILS_URL=https://ftp.gnu.org/gnu/coreutils/"$COREUTILS_PKG"
-E2FSPROGS_URL=https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v"$E2FSPROGS_VERSION"/"$E2FSPROGS_PKG"
+E2FSPROGS_URL=https://mirror.bjtu.edu.cn/kernel/linux/kernel/people/tytso/e2fsprogs/v"$E2FSPROGS_VERSION"/"$E2FSPROGS_PKG"
 PKGCONFIGLITE_URL=http://downloads.sourceforge.net/project/pkgconfiglite/"$PKGCONFIGLITE_VERSION"/"$PKGCONFIGLITE_PKG"
 LIBUUID_URL=http://downloads.sourceforge.net/project/libuuid/"$LIBUUID_PKG"
-UTIL_LINUX_URL=https://www.kernel.org/pub/linux/utils/util-linux/v"$UTIL_LINUX_VERSION"/"$UTIL_LINUX_PKG"
+UTIL_LINUX_URL=https://mirror.bjtu.edu.cn/kernel/linux/utils/util-linux/v"$UTIL_LINUX_VERSION"/"$UTIL_LINUX_PKG"
 GRUB_URL=https://ftp.gnu.org/gnu/grub/"$GRUB_PKG"
 SHADOW_URL=https://github.com/shadow-maint/shadow/releases/download/"$SHADOW_VERSION"/"$SHADOW_PKG"
 SED_URL=https://ftp.gnu.org/gnu/sed/"$SED_PKG"
