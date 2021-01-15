@@ -4,6 +4,7 @@
 
 BINUTILS_URL=https://ftp.gnu.org/gnu/binutils/$BINUTILS_PKG
 GCC_URL=http://mirrors.ustc.edu.cn/gnu/gcc/gcc-"$GCC_VERSION"/"$GCC_PKG"
+GLIBC_URL=https://ftp.gnu.org/gnu/glibc/glibc-"$GLIBC_VERSION".tar.gz
 FLEX_URL=https://github.com/westes/flex/releases/download/v$FLEX_VERSION/$FLEX_PKG
 ZLIB_URL=http://zlib.net/"$ZLIB_PKG"
 BASH_URL=https://ftp.gnu.org/gnu/bash/"$BASH_PKG"
@@ -68,19 +69,22 @@ apply_patch() {
    patch -Np$2 < $1 || exit 1
 }
 
-download_glibc () {
-   if [ -d glibc ]; then
-      cd glibc && git pull && cd .. &&
-      return 0
-   fi
-   git clone git://sourceware.org/git/glibc.git &&
-   cd glibc &&
+unpack_glibc () {
+   unpack xvzf $GLIBC_PKG $GLIBC_SRC &&
+
+   cd $GLIBC_SRC &&
    apply_patch $SCRIPT_DIR/patches/glibc/tg-mach-hurd-link.diff 1 &&
    apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-clock_t_centiseconds.diff 1 &&
    apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-mremap.diff 1 &&
-   apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-prof-eintr.diff 1 &&
-   apply_patch $SCRIPT_DIR/patches/glibc/tg-bits_atomic.h_multiple_threads.diff 1 &&
    cd ..
+}
+
+download_glibc () {
+   download $GLIBC_PKG $GLIBC_URL &&
+   if [ -d "$GLIBC_SRC" ]; then
+      return 0
+   fi
+   unpack_glibc
 }
 
 unpack_gcc () {
