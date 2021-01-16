@@ -8,7 +8,6 @@ GMP_URL=http://mirrors.ustc.edu.cn/gnu/gmp/"$GMP_PKG"
 MPC_URL=http://mirrors.ustc.edu.cn/gnu/mpc/"$MPC_PKG"
 MPFR_URL=http://mirrors.ustc.edu.cn/gnu/mpfr/"$MPFR_PKG"
 
-GLIBC_URL=https://ftp.gnu.org/gnu/glibc/glibc-"$GLIBC_VERSION".tar.gz
 FLEX_URL=https://github.com/westes/flex/releases/download/v$FLEX_VERSION/$FLEX_PKG
 ZLIB_URL=http://zlib.net/"$ZLIB_PKG"
 BASH_URL=https://ftp.gnu.org/gnu/bash/"$BASH_PKG"
@@ -75,22 +74,18 @@ apply_patch_optional() {
    patch -Np$2 < $1
 }
 
-unpack_glibc () {
-   unpack xvzf $GLIBC_PKG $GLIBC_SRC &&
-
-   cd $GLIBC_SRC &&
-   apply_patch $SCRIPT_DIR/patches/glibc/tg-mach-hurd-link.diff 1 &&
-   apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-clock_t_centiseconds.diff 1 &&
-   apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-mremap.diff 1 &&
-   cd ..
-}
-
 download_glibc () {
-   download $GLIBC_PKG $GLIBC_URL &&
-   if [ -d "$GLIBC_SRC" ]; then
+   if [ -d glibc ]; then
+      cd glibc && git pull && cd ..
       return 0
    fi
-   unpack_glibc
+   git clone https://github.com/bminor/glibc.git &&
+   cd glibc &&
+   apply_patch $SCRIPT_DIR/patches/glibc/tg-mach-hurd-link.diff 1 &&
+   apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-clock_t_centiseconds.diff 1 &&
+   apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-prof-eintr.diff 1 &&
+   apply_patch $SCRIPT_DIR/patches/glibc/tg-bits_atomic.h_multiple_threads.diff 1 &&
+   cd ..
 }
 
 unpack_gcc () {
