@@ -14,7 +14,7 @@ export MIG="${ROOT}/bin/${TARGET}-mig"
 
 install_flex() {
    cd "$FLEX_SRC" &&
-   ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes \
+   ac_cv_func_realloc_0_nonnull=no ac_cv_func_malloc_0_nonnull=no ac_cv_func_reallocarray=no \
    ./configure --prefix="$SYS_ROOT" \
       --build="$HOST" \
       --host="$TARGET" &&
