@@ -121,7 +121,7 @@ compile_gcc ()
       --disable-libssp \
       --disable-libvtv \
       --disable-libstdcxx \
-      --enable-languages=c &&
+      --enable-languages=c,c++ &&
    make -j$PROCS all-gcc &&
    make install-gcc &&
    make -j$PROCS configure-target-libgcc &&
