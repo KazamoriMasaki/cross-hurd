@@ -2,7 +2,7 @@
 
 . ./config.sh
 
-BINUTILS_URL=https://ftp.gnu.org/gnu/binutils/$BINUTILS_PKG
+BINUTILS_URL=http://mirrors.ustc.edu.cn/gnu/binutils/$BINUTILS_PKG
 GCC_URL=http://mirrors.ustc.edu.cn/gnu/gcc/gcc-"$GCC_VERSION"/"$GCC_PKG"
 GMP_URL=http://mirrors.ustc.edu.cn/gnu/gmp/"$GMP_PKG"
 MPC_URL=http://mirrors.ustc.edu.cn/gnu/mpc/"$MPC_PKG"
@@ -10,20 +10,20 @@ MPFR_URL=http://mirrors.ustc.edu.cn/gnu/mpfr/"$MPFR_PKG"
 
 FLEX_URL=https://github.com/westes/flex/releases/download/v$FLEX_VERSION/$FLEX_PKG
 ZLIB_URL=http://zlib.net/"$ZLIB_PKG"
-BASH_URL=https://ftp.gnu.org/gnu/bash/"$BASH_PKG"
-COREUTILS_URL=https://ftp.gnu.org/gnu/coreutils/"$COREUTILS_PKG"
+BASH_URL=http://mirrors.ustc.edu.cn/gnu/bash/"$BASH_PKG"
+COREUTILS_URL=http://mirrors.ustc.edu.cn/gnu/coreutils/"$COREUTILS_PKG"
 E2FSPROGS_URL=https://mirror.bjtu.edu.cn/kernel/linux/kernel/people/tytso/e2fsprogs/v"$E2FSPROGS_VERSION"/"$E2FSPROGS_PKG"
 PKGCONFIGLITE_URL=http://downloads.sourceforge.net/project/pkgconfiglite/"$PKGCONFIGLITE_VERSION"/"$PKGCONFIGLITE_PKG"
 LIBUUID_URL=http://downloads.sourceforge.net/project/libuuid/"$LIBUUID_PKG"
 UTIL_LINUX_URL=https://mirror.bjtu.edu.cn/kernel/linux/utils/util-linux/v"$UTIL_LINUX_VERSION"/"$UTIL_LINUX_PKG"
-GRUB_URL=https://ftp.gnu.org/gnu/grub/"$GRUB_PKG"
+GRUB_URL=http://mirrors.ustc.edu.cn/gnu/grub/"$GRUB_PKG"
 SHADOW_URL=https://github.com/shadow-maint/shadow/releases/download/"$SHADOW_VERSION"/"$SHADOW_PKG"
-SED_URL=https://ftp.gnu.org/gnu/sed/"$SED_PKG"
-NCURSES_URL=https://ftp.gnu.org/gnu/ncurses/"$NCURSES_PKG"
+SED_URL=http://mirrors.ustc.edu.cn/gnu/sed/"$SED_PKG"
+NCURSES_URL=http://mirrors.ustc.edu.cn/gnu/ncurses/"$NCURSES_PKG"
 VIM_URL=ftp://ftp.vim.org/pub/vim/unix/"$VIM_PKG"
 GPG_ERROR_URL=ftp://ftp.gnupg.org/gcrypt/libgpg-error/"$GPG_ERROR_PKG"
 GCRYPT_URL=ftp://ftp.gnupg.org/gcrypt/libgcrypt/"$GCRYPT_PKG"
-MAKE_URL=ftp://ftp.gnu.org/gnu/make/"$MAKE_PKG"
+MAKE_URL=http://mirrors.ustc.edu.cn/gnu/make/"$MAKE_PKG"
 
 unpack () {
    if [ -d "$3" ]; then
@@ -37,7 +37,7 @@ download () {
    if [ -f $1 ]; then
       return 0
    fi
-   wget $2
+   wget -c $2
 }
 
 download_gnumach () {
@@ -79,7 +79,7 @@ download_glibc () {
       cd glibc && git pull && cd ..
       return 0
    fi
-   git clone https://github.com/bminor/glibc.git &&
+   git clone https://gitee.com/Aloxaf/glibc.git &&
    cd glibc &&
    apply_patch $SCRIPT_DIR/patches/glibc/tg-mach-hurd-link.diff 1 &&
    apply_patch $SCRIPT_DIR/patches/glibc/unsubmitted-clock_t_centiseconds.diff 1 &&
