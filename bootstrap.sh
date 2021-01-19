@@ -56,6 +56,7 @@ compile_mpfr () {
        --prefix="$ROOT" \
        --build="$HOST" \
        --host="$HOST" \
+       --with-gmp="$ROOT" \
        --with-sysroot="$SYSTEM"
     make -j$PROCS &&
     make install
@@ -72,6 +73,7 @@ compile_mpc () {
        --prefix="$ROOT" \
        --build="$HOST" \
        --host="$HOST" \
+       --with-gmp="$ROOT" \
        --with-sysroot="$SYSTEM"
     make -j$PROCS &&
     make install
